@@ -21,6 +21,13 @@
           <input name="username" type="username" maxlength="16" placeholder="请输入性别" style="width:200px;font-size:20px; "></br>
       </td>
       </tr>
+
+      <tr>
+          <td align="center">电话</td>
+          <td >
+          <input name="phone" type="phone" maxlength="16" placeholder="请输入电话" style="width:200px;font-size:20px; "></br>
+      </td>
+      </tr>
 	
 	  
 	   <tr>

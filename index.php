@@ -1,3 +1,10 @@
+<?php
+    //开启session
+    session_start();
+    header("content-type:text/html;charset=utf-8");
+    // date_default_timezone_set('PRC');  //设置中国时区北京时间
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,18 +32,38 @@
 
 </head>
 <body>
+<?php 
+    //
+
+    
+
+?>
+
+
+
 <h1>留言板</h1><a href='login0.php'>登录</a><br><a href="logout.php">登出</a>
-    <!-- <form action="save.php" method="POST">
-        <input type="text" name="message" value="">
-        <input type="submit" name="" value="提交" >
-    </form> -->
-
-
 
     <!--输入板块 -->
     <div class="input">
             <form action="save.php" method="post">
-                <textarea name="message"  class="content" autofocus="autofocus" placeholder="请输入留言内容：" ></textarea><br/>
+            <!-- php 中实时监控textarea输入字数 并在textarea里右下角显示剩余数字-->
+            <script type="text/javascript">
+                //实时监控textarea输入字数
+                function textCounter(textarea, countdown, maxlimit) {
+                    //#TODO添加延时器，通过flag的值判断输入的状态，解决输入中文时，输入的字数不准确的问题
+
+                    if (textarea.value.length > maxlimit)
+                        //如果输入的字数超过了限制，就把超过的部分截取掉
+                        textarea.value = textarea.value.substring(0, maxlimit);
+                    else
+                        //countdown是textarea下面的span标签
+                        countdown.value = maxlimit - textarea.value.length;
+                    
+                }
+            </script>
+                <textarea name="message"  class="content" autofocus="autofocus" placeholder="请输入留言内容："  onkeyup="textCounter(this, this.form.counter, 5);" onkeydown="textCounter(this, this.form.counter, 5);"></textarea><br/>
+                <input readonly type="text" name="counter" size="3" maxlength="3" value="5"style="border: none; background-color: transparent; text-align: center; color: #ccc; font-size: 12px; font-family: Arial, sans-serif;">
+                <!-- <textarea  name="message"  class="content" autofocus="autofocus" placeholder="请输入留言内容："  maxlength="400"></textarea><br/> -->
                 <input type="submit" class="submit" value="提交留言"/>
             </form>
         </div>
@@ -64,42 +91,50 @@
                 //总页数
                 $total_page = ceil($total / $page_size);
         
+                //使用参数绑定和预处理语句执行sql语句   ？表示占位符
+                $query_message = $link->prepare("select * from  message order by createTime asc  limit ?, ?");
 
-                $query_message = "select * from  message order by addTime asc  limit $start, $page_size";
+                //绑定参数    ii表示两个参数都是整数
+                $query_message->bind_param("ii", $start, $page_size);
 
-                $result = mysqli_query($link, $query_message);
+                $query_message->execute();
 
-                $message = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                //获取结果集
+                $result = $query_message->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                // $query_message = "select * from  message order by createTime asc  limit $start, $page_size";
+
+                // $result = mysqli_query($link, $query_message);
+
+                // $message = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 
 
-                foreach($message as $key => $value)
+                foreach($result as $key => $value)
                 {
             ?>
 
                     <div class="output">
-                        <span class = 'user'>用户名：<?php 
-                        $query_user = "select username from  admin where userId = $value[userId]";
-                        $result_user = mysqli_query($link, $query_user);
-                        $username = mysqli_fetch_array($result_user)[0]; 
-                        echo $value['username']?></span>
-                        <span class = 'time'>留言时间：<?php echo $value["addTime"]?></span>
+                        <span class = 'user'>用户名：
+                            <?php 
+                            // $query_user = "select username from  admin where userId = $value[userId]";
+                            // $result_user = mysqli_query($link, $query_user);
+                            // $username = mysqli_fetch_array($result_user)[0];
+                            // echo $username;
+                            ?>
+                        </span>
+                        <span class = 'time'>留言时间：<?php echo $value["createTime"]?></span>
                         <div class = 'content'>
-                            <?php echo $value["content"] ?>
-                            <a href= "delete.php" >删除</a>
-                            <a class="reply">回复</a><a class="sub">提交</a>
+                            <?php 
+                                echo $value["content"] 
+                            ?>
+                            <!-- Id传输messageId给delete.php -->
+                            <a href="delete.php?Id=<?php echo $value["messageId"]?>">删除</a>
+                            <a href="reply.php" class="reply">回复</a>
                         </div>
 
                         
                     </div>
-
-                  <!-- // echo "<li>".
-                    // // "<p>留言人：". $username."</p>".
-                    // "<p>留言人：".$value["username"]."</p>".
-                    // "<p  style='line-height: 22px'>留言时间：".$value["addTime"]."</p>".
-                    // "<P>留言内容：".$value["content"]."</p>".
-                    // "</li>"; -->
-
                   
             <?php    
                 }
@@ -109,7 +144,6 @@
 
 
         <tr>
-        <td align="center">
          <a href="?page=1">首页</a>
          <a href="?page=<?php echo $page==1 ? 1 : $page - 1 ;?>">上一页</a>
          <a href="?page=<?php echo $page==$total_page ? $total_page : $page + 1 ;?>">下一页</a>
@@ -122,3 +156,4 @@
     </ol>
 </body>
 </html>
+

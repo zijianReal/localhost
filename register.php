@@ -12,7 +12,30 @@
 	$username=$_POST['username'];
 	$password=$_POST['password'];
     $account=$_POST['account'];
+	$phone=$_POST['phone'];
 	$email=$_POST['email'];
+
+
+	//过滤用户名和密码
+	$username=htmlspecialchars($username);
+	$password=htmlspecialchars($password);
+	$account=htmlspecialchars($account);
+	$phone=htmlspecialchars($phone);
+	$email = filter_var(filter_var($email,FILTER_SANITIZE_EMAIL),FILTER_VALIDATE_EMAIL);//使用php原生过滤器先删除非email字符，后验证
+
+
+ ////PHP 添加表单验证
+ ///https://www.runoob.com/php/php-form-validation.html
+ ////合法性判断
+ ////https://my.oschina.net/uanaoeng/blog/5297793
+ ///https://blog.csdn.net/keepwin100/article/details/84960534
+ ///PHP性能优化指南:减少正则表达式的使用
+ ///https://www.cainiaoxueyuan.com/bc/16445.html
+ ///添加cookie 检验  以及remember me 功能 换个方式
+
+ ///Password Hashing API 对密码加密
+
+
 	
 
 

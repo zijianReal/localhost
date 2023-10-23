@@ -22,12 +22,16 @@
 
     $account = $_SESSION['account'];
 
-    $query_user = "select username from  admin where account = '$account'";
+    $query_user = "select userId from  admin where account = '$account'";
     $result_user = mysqli_query($link, $query_user);
-    $username = mysqli_fetch_array($result_user)[0];
+    // $username = mysqli_fetch_array($result_user)[0];
 
-    $add_message = "insert into ".TABLE_NAME."(username,addTime,content) values('$username','$time','$message')";
-    //`messageid`, `userId`, 'addtimne',`content`,
+    $userId = mysqli_fetch_array($result_user)[0];
+
+
+
+    $add_message = "insert into ".TABLE_NAME."(userId,createTime,content) values('$userId','$time','$message')";
+    //`messageid`, `userId`, 'addtimne',`content`,'status'
 
     var_dump($add_message);
     

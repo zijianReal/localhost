@@ -41,6 +41,8 @@ if (isset($_POST['login'])) {
 
         $num = count($result);
 
+       
+
 
         if ($num) {
             //设置session
@@ -65,4 +67,4 @@ if (isset($_POST['login'])) {
         }
     }
 }
-?>
+?>  

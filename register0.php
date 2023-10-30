@@ -36,6 +36,18 @@
           <input name="email" type="email" maxlength="16" placeholder="请输入email" style="width:200px;font-size:20px; "></br>
       </td>
       </tr>
+
+      <tr>
+        <td>请上传头像</td>
+        <td><input type="file" name="file" id="file" /></td>
+      </tr>
+
+
+      <tr>
+        <td align="center">
+            <input type="reset" name="reset" value="重置" style="font-size:17px;" class="btn"/>
+        </td>
+      </tr>
 	  
      
         <td colspan="1" align="center">

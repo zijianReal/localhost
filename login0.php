@@ -3,8 +3,8 @@
 			<legend>用户登录</legend>
 			<ul>
 				<li>
-					<label>用户名:</label>
-					<input type="text" name="username">
+					<label>账号:</label>
+					<input type="text" name="account">
 				</li>
 				<li>
 					<label>密   码:</label>

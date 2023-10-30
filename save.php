@@ -30,7 +30,7 @@
 
 
 
-    $add_message = "insert into ".TABLE_NAME."(userId,createTime,content) values('$userId','$time','$message')";
+    $add_message = "insert into ".TABLE_NAME."(userId,createTime,content,parentId) values('$userId','$time','$message',0)";
     //`messageid`, `userId`, 'addtimne',`content`,'status'
 
     var_dump($add_message);
